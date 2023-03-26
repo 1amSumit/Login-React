@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
@@ -40,27 +40,25 @@ const Login = (props) => {
     isValid: undefined,
   });
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setFormIsValid(
-  //       enteredEmail.includes("@") && enteredPassword.trim().length > 6
-  //     );
-  //   }, 500);
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
 
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [enteredEmail, enteredPassword]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFormIsValid(emailIsValid && passwordIsValid);
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [emailIsValid, passwordIsValid]);
 
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_INPUT", val: event.target.value });
-
-    setFormIsValid(emailState.isValid && passwordState.isValid);
   };
 
   const passwordChangeHandler = (event) => {
     dispatchPassword({ type: "INPUT_PASSWORD", val: event.target.value });
-    setFormIsValid(emailState.isValid && passwordState.isValid);
   };
 
   const validateEmailHandler = () => {
